@@ -18,19 +18,28 @@ UserRouter.post("/login",async(req,res)=>{
     if(result){
         const token =jwt.sign({userID:user._id},"masai",)
         // ?{expiresIn:"24h"}
-        res.send(({"msg":"Login Succesfully","token":token}))
+        res.status(200).send({"msg":"Login Succesfully","token":token})
     }
-    else {
-        res.status(400).send("Wrong Credntials")
+    else if(!result){
+        res.status(404).send("Please Enter Correct Password")
     }
     })
+    }else {
+        res.send("User Not Found Please Signup First.")
     }
     }catch(err){
-        res.status(404).send({"err":err})
+        res.status(400).send({"err":err})
     }
     })
     UserRouter.post("/resistor",async(req,res)=>{
     const {email,firstname,lastname,pass}=req.body;
+    const user =await UserModel.findOne({email})
+     if(user){
+
+        res.status(400).send("User Already Exits Please login.")
+
+     }
+else {
     try{
     bcrypt.hash(pass,5,async(err,secure_password)=>{
     if(err){
@@ -38,13 +47,14 @@ UserRouter.post("/login",async(req,res)=>{
     }else {
         const user=new UserModel({firstname,lastname,pass:secure_password,email})
         await user.save()
-        res.send("Resistered Succesfully")
+        res.status(200).send("Resistered Succesfully")
     }
     })
     }catch(err){
-        res.status(404).send("Error While Resistroring The User")
+        res.status(400).send("Error While Resistroring The User")
         console.log(err)
     }
+}
     })
     module.exports={UserRouter}
     // 63c0328b1cf87dc5efcc7d5e
