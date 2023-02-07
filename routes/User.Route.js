@@ -4,7 +4,9 @@ const bcrypt=require("bcrypt");
 const { UserModel } = require("../model/user.model");
 const UserRouter=express.Router()
 UserRouter.use(express.json())
-const jwt=require("jsonwebtoken")
+const jwt=require("jsonwebtoken");
+const { userValidator } = require("../Middlewere/User.validator");
+
 UserRouter.get("/", async (req, res) => {
     let users=await UserModel.find()
       res.send(users);
@@ -21,7 +23,7 @@ UserRouter.post("/login",async(req,res)=>{
         res.status(200).send({"msg":"Login Succesfully","token":token})
     }
     else if(!result){
-        res.status(404).send("Please Enter Correct Password")
+        res.status(400).send("Please Enter Correct Password")
     }
     })
     }else {
@@ -31,6 +33,7 @@ UserRouter.post("/login",async(req,res)=>{
         res.status(400).send({"err":err})
     }
     })
+    UserRouter.use("/resistor",userValidator)
     UserRouter.post("/resistor",async(req,res)=>{
     const {email,firstname,lastname,pass}=req.body;
     const user =await UserModel.findOne({email})
@@ -53,6 +56,7 @@ else {
         console.log(err)
     }
 }
+
     })
     module.exports={UserRouter}
     // 63c0328b1cf87dc5efcc7d5e

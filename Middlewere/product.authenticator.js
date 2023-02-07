@@ -1,5 +1,5 @@
 const productValidator=(req,res,next)=>{
-    if(req.url=="/products/post"){
+    if(req.url=="/users/resistor"){
      if(req.body.title && req.body.price && req.body.quantity && req.body.brand && req.body.category && req.body.rating && req.body.image&&req.body.description){
         if(typeof req.body.title==="string" &&
         typeof req.body.price==="number" &&
@@ -14,11 +14,11 @@ const productValidator=(req,res,next)=>{
             next()
         }
         else{
-            res.status(404).send({"message":"Wrong data type"})
+            res.status(400).send({"message":"Wrong data type"})
         }
      }
      else{
-        res.status(404).send({"message":"Data doesn't exist"})
+        res.status(400).send({"message":"Data doesn't exist"})
      }
     }
     else{
