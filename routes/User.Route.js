@@ -22,11 +22,11 @@ UserRouter.post("/login",async(req,res)=>{
         res.status(200).send({"msg":"Login Succesfully","token":token})
     }
     else if(!result){
-        res.status(400).send("Please Enter Correct Password")
+        res.status(400).send([{msg:"Please Enter Correct Password"}])
     }
     })
     }else {
-        res.status(400).send("User Not Found Please Signup First.")
+        res.status(400).send([{msg:"User Not Found Please Signup First."}])
     }
     }catch(err){
         res.status(400).send({"err":err})
@@ -36,7 +36,7 @@ UserRouter.post("/login",async(req,res)=>{
     const {email,firstname,lastname,pass}=req.body;
     const user =await UserModel.findOne({email})
      if(user){
-        res.status(400).send("User Already Exits Please login.")
+        res.status(400).send([{msg: 'User Already Exits Please login'}])
      }
 else {
     try{
@@ -46,11 +46,11 @@ else {
     }else {
         const user=new UserModel({firstname,lastname,pass:secure_password,email})
         await user.save()
-        res.send("Resistered Succesfully")
+        res.send([{ msg: 'Resistered Succesfully'}])
     }
     })
     }catch(err){
-        res.status(400).send("Error While Resistroring The User")
+        res.status(400).send([{ msg: 'Error While Resistroring The User'}])
         console.log(err)
     }
 }
