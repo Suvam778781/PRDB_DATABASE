@@ -5,8 +5,7 @@ const { UserModel } = require("../model/user.model");
 const UserRouter=express.Router()
 UserRouter.use(express.json())
 const jwt=require("jsonwebtoken");
-const { userValidator } = require("../Middlewere/User.validator");
-
+const { validate, validateInputs } = require("../Middlewere/User.validator");
 UserRouter.get("/", async (req, res) => {
     let users=await UserModel.find()
       res.send(users);
@@ -33,8 +32,7 @@ UserRouter.post("/login",async(req,res)=>{
         res.status(400).send({"err":err})
     }
     })
-    UserRouter.use("/resistor",userValidator)
-    UserRouter.post("/resistor",async(req,res)=>{
+    UserRouter.post("/resistor",validateInputs,validate,async(req,res)=>{
     const {email,firstname,lastname,pass}=req.body;
     const user =await UserModel.findOne({email})
      if(user){
