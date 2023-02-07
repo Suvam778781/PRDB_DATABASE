@@ -25,7 +25,7 @@ UserRouter.post("/login",async(req,res)=>{
     }
     })
     }else {
-        res.send("User Not Found Please Signup First.")
+        res.status(400).send("User Not Found Please Signup First.")
     }
     }catch(err){
         res.status(400).send({"err":err})
@@ -35,9 +35,7 @@ UserRouter.post("/login",async(req,res)=>{
     const {email,firstname,lastname,pass}=req.body;
     const user =await UserModel.findOne({email})
      if(user){
-
         res.status(400).send("User Already Exits Please login.")
-
      }
 else {
     try{
@@ -47,7 +45,7 @@ else {
     }else {
         const user=new UserModel({firstname,lastname,pass:secure_password,email})
         await user.save()
-        res.status(200).send("Resistered Succesfully")
+        res.send("Resistered Succesfully")
     }
     })
     }catch(err){
