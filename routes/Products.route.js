@@ -10,7 +10,6 @@ productsRouter.use("/update/:id", Adminauthenticate);
 productsRouter.get("/", async (req, res) => {
   try{
     let {power,limit,page,sortBy,rating,q}=req.query
-  // const data=await HeroModel.find({language,power})
   if(q){
   var data =await ProductsModel.find({ category: { $regex:`${q}`,$options:"$i" }}).skip(page||1).limit(limit||10)
   res.send(data)
@@ -32,6 +31,17 @@ productsRouter.get("/:id", async (req, res) => {
   }
   catch(err){
     res.send({"err":"something went wrong","err":err})
+  }
+});
+productsRouter.post("/addreview/:id", async (req, res) => {
+  const id = req.params.id;
+  const payload=req.body;
+  try{
+    var data =await ProductsModel.updateOne({_id:id},{$push :{review:payload}})
+        res.status(200).send([{"msg":"Review Added Succesfully"}])
+  }
+  catch(err){
+    res.status(400).send([{"err":"something went wrong","err":err}])
   }
 });
 productsRouter.post("/create", async (req, res) => {

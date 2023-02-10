@@ -4,6 +4,7 @@ const productSchema=mongoose.Schema({
   description: String,
   price: Number,
   category: String,
+  review:Array,
   image: String,
   total_quantity: Number,
   quantity: Number,

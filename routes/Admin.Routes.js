@@ -38,7 +38,7 @@ AdminRouter.post("/login",async(req,res)=>{
     })
     }catch(err){
         res.status(404).send("Error While Resistoring The admin")
-        console.log(err)
+        
     }
     })
     module.exports={AdminRouter}

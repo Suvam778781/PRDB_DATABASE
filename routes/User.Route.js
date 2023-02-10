@@ -6,10 +6,20 @@ const UserRouter=express.Router()
 UserRouter.use(express.json())
 const jwt=require("jsonwebtoken");
 const { validate, validateInputs } = require("../Middlewere/User.validator");
-UserRouter.get("/", async (req, res) => {
-    let users=await UserModel.find()
-      res.send(users);
-    });
+UserRouter.get("/singleuser", async (req, res) => {
+    const token=req.headers.authorization
+if(token){
+const decoded=jwt.verify(token,"masai")
+if(decoded){
+    const userID=decoded.userID
+    let users=await UserModel.findOne({_id:userID})
+      res.send(users);}
+      else {
+        res.status(400).send([{"msg":"Please Login First"}])
+      }
+    }
+    else {res.status(400).send([{"msg":"Please Login First"}])}
+    })
 UserRouter.post("/login",async(req,res)=>{
     let {email,pass}=req.body;
     try{

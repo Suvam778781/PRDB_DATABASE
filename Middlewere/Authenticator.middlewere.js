@@ -3,7 +3,7 @@ const authenticate=(req,res,next)=>{
 const token=req.headers.authorization
 if(token){
 const decoded=jwt.verify(token,"masai")
-console.log(req.body)
+
 if(decoded){
     const userID=decoded.userID
     req.body.userID=userID;
