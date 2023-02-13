@@ -1,13 +1,13 @@
 const express = require("express");
 const { Adminauthenticate } = require("../Middlewere/admin.authenticator");
-const { authenticate } = require("../Middlewere/Authenticator.middlewere");
+const { reviewauthenticate } = require("../Middlewere/Productreview.authenticator");
 const { ProductsModel } = require("../model/Products.model");
 const productsRouter = express.Router();
 productsRouter.use(express.json());
 productsRouter.use("/create", Adminauthenticate);
 productsRouter.use("/delete/:id", Adminauthenticate);
 productsRouter.use("/update/:id", Adminauthenticate);
-productsRouter.use("/addreview/:id",authenticate);
+productsRouter.use("/addreview/:id",reviewauthenticate);
 productsRouter.get("/", async (req, res) => {
 let {brand,category,price,limit,page,q}=req.query
 if(category&&brand){
@@ -19,7 +19,7 @@ category=category.split(",")
     }
     catch(err){
       console.log(err)
-      res.send("err:something went wrong")
+      res.status(500).send("err:something went wrong")
     }
 }
   else if(brand){
@@ -52,7 +52,7 @@ category=category.split(",")
     }
     else {
       var data =await ProductsModel.find().skip(page||1).limit(limit||12)
-          res.send(data)
+          res.status(200).send(data)
     }}
     catch(err){
       console.log(err)
@@ -73,12 +73,13 @@ productsRouter.get("/:id", async (req, res) => {
 productsRouter.post("/addreview/:id", async (req, res) => {
   const id = req.params.id;
   const payload=req.body;
+  
   try{
-    var data =await ProductsModel.updateOne({_id:id},{$push :{review:payload}})
+    await ProductsModel.updateOne({_id:id},{$push :{review:payload}})
         res.status(200).send([{"msg":"Review Added Succesfully"}])
   }
   catch(err){
-    res.status(400).send([{"err":"something went wrong","err":err}])
+    res.status(500).send([{"err":"something went wrong","err":err}])
   }
 });
 productsRouter.post("/create", async (req, res) => {
