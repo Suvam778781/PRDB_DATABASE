@@ -14,7 +14,7 @@ if(category&&brand){
   brand=brand.split(",")
 category=category.split(",")
   try{
-    var data =await ProductsModel.find({brand:{$in:brand},category:{$in:category}}).skip(page||1).limit(limit||12)
+    var data =await ProductsModel.find({brand:{$in:brand},category:{$in:category}})
     res.send(data)
     }
     catch(err){
@@ -25,7 +25,7 @@ category=category.split(",")
   else if(brand){
     brand=brand.split(",")
     try{
-      var data =await ProductsModel.find({brand:{$in:brand}}).skip(page||1).limit(limit||12)
+      var data =await ProductsModel.find({brand:{$in:brand}})
       res.send(data)
       }
       catch(err){
@@ -36,7 +36,7 @@ category=category.split(",")
   else if(category){
     category=category.split(",")
     try{
-      var data =await ProductsModel.find({category:{$in:category}}).skip(page||1).limit(limit||12)
+      var data =await ProductsModel.find({category:{$in:category}})
       res.send(data)
       }
       catch(err){
@@ -47,11 +47,11 @@ category=category.split(",")
   else {
     try{
     if(q){
-    var data =await ProductsModel.find({ category: { $regex:`${q}`,$options:"$i" }}).skip(page||1).limit(limit||12)
+    var data =await ProductsModel.find({ category: { $regex:`${q}`,$options:"$i" }})
     res.send(data)
     }
     else {
-      var data =await ProductsModel.find().skip(page||1).limit(limit||12)
+      var data =await ProductsModel.find()
           res.status(200).send(data)
     }}
     catch(err){
