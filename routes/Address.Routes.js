@@ -7,7 +7,10 @@ AddressRouter.use(express.json());
 // AddressRouter.use("/", authenticate);
 AddressRouter.get("/", async (req, res) => {
   // i will pass it from local storage and then it will convert to id then i will get allcartdata  of that perticular person only
-  const userID = req.body.userID;
+  const token=req.headers.authorization
+
+  const decoded=jwt.verify(token,"masai")
+  const userID=decoded.userID;
 
  try{
       let carts = await AddressModel.find({ userID: userID });
@@ -36,7 +39,6 @@ AddressRouter.delete("/delete/:id", async (req, res) => {
   }
 });
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2M2RlMDVmMTI2YjdmNzUyNGQ5MjE0MDUiLCJpYXQiOjE2NzU0OTQ5MjYsImV4cCI6MTY3NTY2NzcyNn0.7kUoCYr2TUI01iYzFAJ0Geb1GHsxOc_JZoFmvsbwZ34
-module.exports = { AddressRouter };
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2M2RlMDVmMTI2YjdmNzUyNGQ5MjE0MDUiLCJpYXQiOjE2NzU0OTQ5MjYsImV4cCI6MTY3NTY2NzcyNn0.7kUoCYr2TUI01iYzFAJ0Geb1GHsxOc_JZoFmvsbwZ34
 
 AddressRouter.post("/addaddress", async (req, res) => {
@@ -45,7 +47,7 @@ AddressRouter.post("/addaddress", async (req, res) => {
 if(token){
 const decoded=jwt.verify(token,"masai")
 if(decoded){
-
+  req.body.userID=decoded.userID;
   const payload = req.body;
   try {
     const address = AddressModel(payload);
