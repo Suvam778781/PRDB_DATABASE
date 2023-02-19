@@ -10,7 +10,6 @@ const { Adminauthenticate } = require("../Middlewere/admin.authenticator");
 AdminRouter.use("/singleadmin",Adminauthenticate)
 AdminRouter.get("/singleadmin",async(req,res)=>{
     const userID=req.body.userID
-    console.log(userID)
     try{
 let admin=await AdminModel.findOne({_id:userID})
     res.status(200).send(admin);}
@@ -30,12 +29,12 @@ AdminRouter.post("/login",async(req,res)=>{
         res.send(({"msg":"Login Succesfully","admintoken":admintoken}))
     }
     else {
-        res.send("please login with admin credentials")
+        res.status(500).send("please login with admin credentials")
     }
     })
     }
     }catch(err){
-        res.status(404).send({"err":err})
+        res.status(500).send("please login with admin credentials")
     }
     })
     AdminRouter.post("/resistor",async(req,res)=>{

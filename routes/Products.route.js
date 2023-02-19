@@ -99,7 +99,7 @@ productsRouter.patch("/update/:id", async (req, res) => {
     await ProductsModel.findByIdAndUpdate({ _id: id }, data);
     res.end("Product Update Succesfully");
   } catch (err) {
-    res.send("err:something went wrong");
+    res.status(400).send("err:something went wrong");
   }
 });
 productsRouter.delete("/delete/:id", async (req, res) => {
