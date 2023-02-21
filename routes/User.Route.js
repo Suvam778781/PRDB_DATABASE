@@ -64,7 +64,34 @@ else {
         console.log(err)
     }
 }
-
     })
+    UserRouter.post("/checkout/:id", async (req, res) => {
+      const id = req.params.id;
+    // all cart item came through the body and push the item;
+      const payload=req.body;
+      try{
+        await UserModel.updateMany({_id:id}, { $push: { allorders: { $each: payload } } }),
+            res.status(200).send([{"msg":"Order Placed Succesfully"}])
+      }
+      catch(err){
+        res.status(500).send([{"err":"something went wrong","err":err}])
+      }
+    });
+
+    UserRouter.post("/changestatus/:userId/:orderId", async (req, res) => {
+        const userId = req.params.userId;
+        const orderId=req.params.orderId;
+        // it will take user id and order id then it find and set perticular data to that(updated value) // 
+        const payload=req.body;
+        try{
+          await UserModel.updateMany( { "users._id":userId, "allorders._id": orderId},{ $set: { 'allorders.$': payload } })
+              res.status(200).send([{"msg":"Toggle Placed Succesfully"}])
+        }
+        catch(err){
+          res.status(500).send([{"err":"something went wrong","err":err}])
+        }
+      });
+  
+
     module.exports={UserRouter}
     // 63c0328b1cf87dc5efcc7d5e
