@@ -19,13 +19,14 @@ cartsRouter.post("/addtocart", async (req, res) => {
   const payload = req.body;
   // const userID = req.body._id;
   // req.body.userID = userID;
-  console.log(payload)
+  // console.log(payload)
   try {
-    const new_cart = CartsModel(payload);
+    const new_cart =new CartsModel(payload);
     await new_cart.save();
     res.send("Products added to cart succesfully");
   } catch (err) {
-    res.send("something went wrong while adding data to cart");
+    console.log(err)
+    res.status(500).send({"err":"something went wrong while adding data to cart",err});
   }
 });
 cartsRouter.patch("/update/:id", async (req, res) => {
@@ -35,7 +36,7 @@ cartsRouter.patch("/update/:id", async (req, res) => {
     await CartsModel.findByIdAndUpdate({ _id: id }, data);
     res.end("Cart Update Succesfully");
   } catch (err) {
-    res.send("err:something went wrong");
+    res.status(500).send("err:something went wrong");
   }
 });
 cartsRouter.delete("/delete/:id", async (req, res) => {
@@ -44,7 +45,7 @@ cartsRouter.delete("/delete/:id", async (req, res) => {
     await CartsModel.deleteOne({ _id: id });
     res.end("Products Delete Succesfully");
   } catch (err) {
-    res.send("err:something went wrong");
+    res.status(500).send("err:something went wrong");
   }
 });
 module.exports = { cartsRouter };
