@@ -6,6 +6,7 @@ const UserRouter=express.Router()
 UserRouter.use(express.json())
 const jwt=require("jsonwebtoken");
 const { validate, validateInputs } = require("../Middlewere/User.validator");
+const { CartsModel } = require("../model/Cart.model");
 UserRouter.get("/singleuser", async (req, res) => {
     const token=req.headers.authorization
 if(token){
@@ -70,6 +71,7 @@ else {
     // all cart item came through the body and push the item;
       const payload=req.body;
       try{
+        await CartsModel.deleteMany({_userId:id})
         await UserModel.updateMany({_id:id}, { $push: { allorders: { $each: payload } } }),
             res.status(200).send([{"msg":"Order Placed Succesfully"}])
       }
@@ -77,7 +79,6 @@ else {
         res.status(500).send([{"err":"something went wrong","err":err}])
       }
     });
-
     UserRouter.patch("/changestatus/:userId/:orderId", async (req, res) => {
         const userId = req.params.userId;
         const orderId=req.params.orderId;
