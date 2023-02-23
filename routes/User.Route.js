@@ -78,7 +78,7 @@ else {
       }
     });
 
-    UserRouter.post("/changestatus/:userId/:orderId", async (req, res) => {
+    UserRouter.patch("/changestatus/:userId/:orderId", async (req, res) => {
         const userId = req.params.userId;
         const orderId=req.params.orderId;
         // it will take user id and order id then it find and set perticular data to that(updated value) // 
@@ -88,7 +88,7 @@ else {
               res.status(200).send([{"msg":"Toggle Placed Succesfully"}])
         }
         catch(err){
-          res.status(500).send([{"err":"something went wrong","err":err}])
+          res.status(500).send([{"msg":"something went wrong","err":err}])
         }
       });
   
