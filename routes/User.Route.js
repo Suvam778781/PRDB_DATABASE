@@ -7,6 +7,7 @@ UserRouter.use(express.json())
 const jwt=require("jsonwebtoken");
 const { validate, validateInputs } = require("../Middlewere/User.validator");
 const { CartsModel } = require("../model/Cart.model");
+const { Adminauthenticate } = require("../Middlewere/admin.authenticator");
 UserRouter.get("/singleuser", async (req, res) => {
     const token=req.headers.authorization
 if(token){
@@ -87,6 +88,16 @@ else {
         try{
           await UserModel.updateMany( { "users._id":userId, "allorders._id": orderId},{ $set: { 'allorders.$': payload } })
               res.status(200).send([{"msg":"Toggle Placed Succesfully"}])
+        }
+        catch(err){
+          res.status(500).send([{"msg":"something went wrong","err":err}])
+        }
+      });
+      UserRouter.use("/allusers",Adminauthenticate)
+      UserRouter.get("/allusers", async (req, res) => {
+        try{
+         let allusers=await UserModel.find()
+              res.status(200).send(allusers)
         }
         catch(err){
           res.status(500).send([{"msg":"something went wrong","err":err}])

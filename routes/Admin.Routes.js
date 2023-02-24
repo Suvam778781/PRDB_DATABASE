@@ -63,6 +63,17 @@ else {
 
 }
     })
+
+ AdminRouter.use("/alladmin",Adminauthenticate)
+ AdminRouter.get("/alladmin",async(req,res)=>{
+        try{
+         let alladmin=await AdminModel.find()
+              res.status(200).send(alladmin)
+        }
+        catch(err){
+          res.status(500).send([{"msg":"something went wrong","err":err}])
+        }
+ })   
     module.exports={AdminRouter}
     // 63c0328b1cf87dc5efcc7d5e
 
