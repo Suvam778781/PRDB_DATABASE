@@ -33,6 +33,9 @@ AdminRouter.post("/login",async(req,res)=>{
     }
     })
     }
+    else {
+        res.status(500).send("please login with admin credentials")
+    }
     }catch(err){
         res.status(500).send("please login with admin credentials")
     }
